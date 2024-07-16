@@ -13,13 +13,23 @@ import { CreateUserParams, UpdateUserParams } from '@/types'
 export async function createUser(user: CreateUserParams) {
   try {
     await connectToDatabase()
+    console.log('Database connected successfully.')
 
+    // Validation des données d'entrée
+    if (!user.email || !user.username || !user.firstName || !user.lastName || !user.photo || !user.clerkId) {
+      throw new Error('All fields are required')
+    }
+
+    console.log('Creating user with data:', user)
     const newUser = await User.create(user)
+    
+    console.log('User created successfully:', newUser)
     return JSON.parse(JSON.stringify(newUser))
   } catch (error) {
     handleError(error)
   }
 }
+
 
 export async function getUserById(userId: string) {
   try {
